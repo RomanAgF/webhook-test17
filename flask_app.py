@@ -17,6 +17,10 @@ def send_message_to_telegram(text):
 @app.route('/webhook', methods=['POST'])
 def webhook():
     try:
+        token = request.headers.get('X-Bitrix-Token')  # Получаем токен из заголовка запроса
+        if token != 'agjqk56faus8syd4k7bpae4olywg2tk1':
+            return 'Unauthorized', 401  # Если токен не совпадает, возвращаем ошибку 401
+
         data = request.json  # Получаем данные из POST-запроса
         print(f"Received data: {data}")  # Логируем полученные данные
 
