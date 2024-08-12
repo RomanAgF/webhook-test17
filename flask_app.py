@@ -20,11 +20,11 @@ def webhook():
         data = request.json  # Получаем данные из POST-запроса
         print(f"Received data: {data}")  # Логируем полученные данные
 
-        if 'event' in data:
-            event_type = data['event']
-            if event_type == 'ONCRMLEADADD':
-                lead_title = data['data']['FIELDS']['TITLE']
-                message = f'Новый лид создан: {lead_title}'
+        if 'result' in data:
+            event_type = data['result']
+            # if event_type == 'ONCRMLEADADD':
+            #     lead_title = data['data']['FIELDS']['TITLE']
+                message = f'Новый лид создан: {event_type}'
                 send_message_to_telegram(message)
             # elif event_type == 'ONCRMPRODUCTADD':
             #     product_name = data['data']['FIELDS']['NAME']
