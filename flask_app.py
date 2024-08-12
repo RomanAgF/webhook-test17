@@ -21,17 +21,18 @@ def webhook():
         print(f"Received data: {data}")  # Логируем полученные данные
 
         if 'event' in data:
-                event_type = data['result']
-                # lead_title = data['data']['FIELDS']['TITLE']
-                message = f'Новый лид создан: {event_type}'
+            event_type = data['event']
+            if event_type == 'ONCRMLEADADD':
+                lead_title = data['data']['FIELDS']['TITLE']
+                message = f'Новый лид создан: {lead_title}'
                 send_message_to_telegram(message)
             # elif event_type == 'ONCRMPRODUCTADD':
             #     product_name = data['data']['FIELDS']['NAME']
             #     message = f'Новый товар создан: {product_name}'
             #     send_message_to_telegram(message)
-            # else:
-            #     message = 'Неизвестное событие.'
-            #     send_message_to_telegram(message)
+            else:
+                message = 'Неизвестное событие.'
+                send_message_to_telegram(message)
 
         return 'OK', 200
     except Exception as e:
