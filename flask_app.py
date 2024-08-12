@@ -4,8 +4,8 @@ from flask import Flask, request
 app = Flask(__name__)
 
 # Вставь сюда свой токен Telegram
-TELEGRAM_BOT_TOKEN = '7201807860:AAFrdTVZaZfNNUWi70SV1mKibsItmveEItQ'
-TELEGRAM_CHAT_ID = '352566109'
+TELEGRAM_BOT_TOKEN = '7347761889:AAHgevNf0ec57pYLhrKB8JZ8yWOFRPllj24'
+TELEGRAM_CHAT_ID = '613505553'
 
 def send_message_to_telegram(text):
     url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
@@ -21,18 +21,17 @@ def webhook():
         print(f"Received data: {data}")  # Логируем полученные данные
 
         if 'event' in data:
-            event_type = data['event']
-            if event_type == 'ONCRMLEADADD':
-                lead_title = data['data']['FIELDS']['TITLE']
-                message = f'Новый лид создан: {lead_title}'
+                event_type = data['result']
+                # lead_title = data['data']['FIELDS']['TITLE']
+                message = f'Новый лид создан: {event_type}'
                 send_message_to_telegram(message)
-            elif event_type == 'ONCRMPRODUCTADD':
-                product_name = data['data']['FIELDS']['NAME']
-                message = f'Новый товар создан: {product_name}'
-                send_message_to_telegram(message)
-            else:
-                message = 'Неизвестное событие.'
-                send_message_to_telegram(message)
+            # elif event_type == 'ONCRMPRODUCTADD':
+            #     product_name = data['data']['FIELDS']['NAME']
+            #     message = f'Новый товар создан: {product_name}'
+            #     send_message_to_telegram(message)
+            # else:
+            #     message = 'Неизвестное событие.'
+            #     send_message_to_telegram(message)
 
         return 'OK', 200
     except Exception as e:
