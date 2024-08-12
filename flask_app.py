@@ -24,7 +24,7 @@ def webhook():
     # Формируем сообщение
     event = data.get('event')
     fields = data.get('data[FIELDS][ID]')
-    message = f'Event: {event}\nLead ID: {fields}'
+    message = f'Название события: {event}\ ID Сделки: {fields}'
     
     # Отправляем сообщение в Telegram
     send_telegram_message(message)
