@@ -20,8 +20,8 @@ def webhook():
         data = request.json  # Получаем данные из POST-запроса
         print(f"Received data: {data}")  # Логируем полученные данные
 
-        if 'event' in data:
-            event_type = data['event']
+        if 'result' in data:
+            event_type = data['result']
             if event_type == 'ONCRMLEADADD':
                 lead_title = data['data']['FIELDS']['TITLE']
                 message = f'Новый лид создан: {lead_title}'
