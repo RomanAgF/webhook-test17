@@ -22,7 +22,7 @@ def webhook():
 
         if 'result' in data:
             event_type = data['result']
-            if event_type != null:
+            #if event_type != null:
                 lead_title = data['time']['start']['finish']
                 message = f'Новый лид создан: {lead_title}'
                 send_message_to_telegram(message)
