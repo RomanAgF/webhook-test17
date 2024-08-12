@@ -23,7 +23,7 @@ def webhook():
         if 'result' in data:
             event_type = data['result']
             if event_type == 'ONCRMLEADADD':
-                lead_title = data['data']['FIELDS']['TITLE']
+                lead_title = data['time']['start']
                 message = f'Новый лид создан: {lead_title}'
                 send_message_to_telegram(message)
             elif event_type == 'ONCRMPRODUCTADD':
