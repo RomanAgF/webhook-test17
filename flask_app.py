@@ -1,52 +1,41 @@
-import requests
 from flask import Flask, request
+import requests
 
 app = Flask(__name__)
 
-# Вставь сюда свой токен Telegram
-TELEGRAM_BOT_TOKEN = '7347761889:AAHgevNf0ec57pYLhrKB8JZ8yWOFRPllj24'
+# Замените на ваш токен бота и ID чата
+TELEGRAM_TOKEN = '7347761889:AAHgevNf0ec57pYLhrKB8JZ8yWOFRPllj24'
 TELEGRAM_CHAT_ID = '613505553'
 
-def send_message_to_telegram(text):
-    url = f'https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage'
-    data = {'chat_id': TELEGRAM_CHAT_ID, 'text': text}
+def send_telegram_message(text):
+    url = f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage'
+    data = {
+        'chat_id': TELEGRAM_CHAT_ID,
+        'text': text
+    }
     response = requests.post(url, data=data)
     return response
 
-# Добавляем обработчик вебхука
 @app.route('/webhook', methods=['POST'])
 def webhook():
-    try:
-        token = request.headers.get('X-Bitrix-Token')  # Получаем токен из заголовка запроса
-        if token != 'agjqk56faus8syd4k7bpae4olywg2tk1':
-            return 'Unauthorized', 401  # Если токен не совпадает, возвращаем ошибку 401
-
-        data = request.json  # Получаем данные из POST-запроса
-        print(f"Received data: {data}")  # Логируем полученные данные
-
-        if 'result' in data:
-            event_type = data['result']
-            if event_type != '':
-                lead_title = data['time']['start']
-                message = f'Новый лид создан: {lead_title}'
-                send_message_to_telegram(message)
-            # elif event_type == 'ONCRMPRODUCTADD':
-            #     product_name = data['data']['FIELDS']['NAME']
-            #     message = f'Новый товар создан: {product_name}'
-            #     send_message_to_telegram(message)
-            # else:
-            #     message = 'Неизвестное событие.'
-            #     send_message_to_telegram(message)
-
-        return 'OK', 200
-    except Exception as e:
-        print(f"Error: {e}")  # Логируем ошибки, если они есть
-        return 'Error', 500
-
-@app.route('/')
-def index():
+    # Получаем данные из вебхука
+    data = request.form.to_dict()
     
-    return 'Webhook is active. Please send data to /webhook endpoint.', 200
+    # Формируем сообщение
+    event = data.get('event')
+    fields = data.get('data[FIELDS][ID]')
+    message = f'Event: {event}\nLead ID: {fields}'
+    
+    # Отправляем сообщение в Telegram
+    send_telegram_message(message)
+    
+    return 'OK'
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5000)
+
+
+
+
+
+
